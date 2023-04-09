@@ -44,16 +44,26 @@ public class ArticleListServlet extends HttpServlet {
 			
 			int page = Integer.parseInt(inputedPage);
 			
+			int itemsInAPage = 10;
+			int limitfrom = (page-1) * itemsInAPage;
+			int limittake = itemsInAPage;
+			
 			SecSql sql = new SecSql();
 			
 			sql.append("SELECT * FROM article");
-			sql.append("ORDER BY id DESC");
+			sql.append("ORDER BY id DESC LIMIT ?, ?", limitfrom, limittake);
 			
 			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
 			
 			response.getWriter().append(articleRows.toString());
 			
+			
+			SecSql sql1 = new SecSql();
+			sql1.append("SELECT COUNT(*) FROM article");
+			int pagenum = DBUtil.selectRowIntValue(conn, sql1);
+			
 			request.setAttribute("articleRows", articleRows);
+			request.setAttribute("pagenum", pagenum);
 //			 서블릿에서 jsp에 뭔가를 알려줘야할때
 			
 			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);

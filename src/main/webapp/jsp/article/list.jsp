@@ -4,6 +4,20 @@
 	pageEncoding="UTF-8"%>
 <%
 List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getAttribute("articleRows");
+int pagenum = (int) request.getAttribute("pagenum");
+
+int pages = 0;
+
+if(pagenum%10==0) {
+	pages= pagenum/10;
+}
+else if(pagenum<=10) {
+	pages = 1;
+}
+else {
+	pages = pagenum/10+1;
+}
+
 %>
 <!DOCTYPE html>
 <html>
@@ -34,5 +48,10 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 		</tr>
 		<%} %>
 	</table>
+	
+	<%for(int i = 1; i <= pages; i++) {
+	%>
+	<div style = "display: inline-block;"><a href="list?page=<%=i%>"><%=i %></a></div>
+	<%} %>
 </body>
 </html>
