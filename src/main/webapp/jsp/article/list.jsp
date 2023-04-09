@@ -21,6 +21,7 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 			<th>번호</th>
 			<th>제목</th>
 			<th>내용</th>
+			<th>삭제</th>
 		</tr>
 		
 		<%for(Map<String, Object> articleRow : articleRows) {
@@ -29,6 +30,7 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 			<td><%=articleRow.get("id") %></td>
 			<td><%=articleRow.get("regDate") %></td>
 			<td><a href="detail?id=<%=articleRow.get("id")%>"><%=articleRow.get("title") %></a></td>
+			<td><a href="delete?id=<%=articleRow.get("id")%>">del</a></td>
 		</tr>
 		<%} %>
 	</table>

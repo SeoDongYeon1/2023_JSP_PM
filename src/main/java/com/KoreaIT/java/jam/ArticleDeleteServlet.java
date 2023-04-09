@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.KoreaIT.java.jam.util.DBUtil;
 import com.KoreaIT.java.jam.util.SecSql;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+@WebServlet("/article/delete")
+public class ArticleDeleteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -36,29 +36,23 @@ public class ArticleListServlet extends HttpServlet {
 			conn = DriverManager.getConnection(url, "root", "");
 			response.getWriter().append("Success!!");
 			
-			String inputedPage = request.getParameter("page");
+			String inputedId = request.getParameter("id");
 			
-			if(inputedPage==null) {
-				inputedPage = "1";
+			if(inputedId==null) {
+				inputedId = "1";
 			}
 			
-			int page = Integer.parseInt(inputedPage);
+			int id = Integer.parseInt(inputedId);
 			
 			SecSql sql = new SecSql();
 			
-			sql.append("SELECT * FROM article");
-			sql.append("ORDER BY id DESC");
+			sql.append("DELETE FROM article");
+			sql.append("WHERE id = ?", id);
 			
-			List<Map<String, Object>> articleRows = DBUtil.selectRows(conn, sql);
+			DBUtil.delete(conn, sql);
 			
-			response.getWriter().append(articleRows.toString());
+			response.getWriter().append(String.format("<script>alert('%d번 글이 삭제되었습니다.'); location.replace('list')</script>", id));
 			
-			request.setAttribute("articleRows", articleRows);
-//			 서블릿에서 jsp에 뭔가를 알려줘야할때
-			
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
-			
-					
 		} catch (SQLException e) {
 			System.out.println("에러 : " + e);
 		} finally {
